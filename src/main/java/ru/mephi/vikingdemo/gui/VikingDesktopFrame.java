@@ -14,14 +14,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 
-
 public class VikingDesktopFrame extends JFrame {
 
     private final VikingService vikingService;
-    private final VikingTableModel tableModel = new VikingTableModel();
+    private final VikingTableModel tableModel;
 
     public VikingDesktopFrame(VikingService vikingService) {
         this.vikingService = vikingService;
+        this.tableModel = new VikingTableModel(vikingService);
 
         setTitle("Viking Demo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,17 +40,25 @@ public class VikingDesktopFrame extends JFrame {
         JButton createButton = new JButton("Create random viking");
         createButton.addActionListener(event -> onCreateViking());
 
+        JButton refreshButton = new JButton("Refresh");
+        refreshButton.addActionListener(event -> tableModel.refresh());
+
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(createButton);
+        bottomPanel.add(refreshButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void onCreateViking() {
-        Viking viking = vikingService.createRandomViking();
+        vikingService.createRandomViking();
+        tableModel.refresh();
+    }
+
+    public void addNewViking(Viking viking) {
         tableModel.addViking(viking);
     }
-    
-    public void addNewViking(Viking viking){
-        tableModel.addViking(viking);
+
+    public void refreshTable() {
+        tableModel.refresh();
     }
 }
