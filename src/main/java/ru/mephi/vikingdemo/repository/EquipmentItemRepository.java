@@ -45,7 +45,10 @@ public class EquipmentItemRepository {
         return jdbcTemplate.query(sql, equipmentRowMapper);
     }
 
-    public void save(long vikingId, String name, String quality) {
+    public void save(EquipmentItemEntity item) {
+        Integer vikingId = item.vikingId();
+        String name = item.name();
+        String quality = item.quality();
         String sql = """
                 insert into equipment_items(viking_id, name, quality)
                 values (?, ?, ?)

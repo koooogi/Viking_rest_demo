@@ -8,7 +8,8 @@ create table if not exists vikings (
     age int not null,
     height_cm int not null,
     hair_color varchar(50) not null,
-    beard_style varchar(50) not null
+    beard_style varchar(50) not null,
+    description text
 );
 
 create table if not exists equipment_items (

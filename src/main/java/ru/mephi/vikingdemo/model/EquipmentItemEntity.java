@@ -1,8 +1,8 @@
 package ru.mephi.vikingdemo.model;
 
 public record EquipmentItemEntity(
-        int id,
-        int vikingId,
+        Integer id,
+        Integer vikingId,
         String name,
         String quality
 ) {

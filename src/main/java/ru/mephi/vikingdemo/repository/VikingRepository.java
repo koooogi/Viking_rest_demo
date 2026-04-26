@@ -27,7 +27,7 @@ public class VikingRepository {
                     rs.getInt("height_cm"),
                     HairColor.valueOf(rs.getString("hair_color")),
                     BeardStyle.valueOf(rs.getString("beard_style")),
-                    rs.getString("desc")
+                    rs.getString("description")
             );
 
     public VikingRepository(JdbcTemplate jdbcTemplate) {
@@ -44,7 +44,7 @@ public class VikingRepository {
         return jdbcTemplate.query(sql, vikingRowMapper);
     }
 
-    public Optional<VikingEntity> findById(long id) {
+    public Optional<VikingEntity> findById(int id) {
         String sql = """
                 select id, name, age, height_cm, hair_color, beard_style
                 from vikings
@@ -56,7 +56,7 @@ public class VikingRepository {
         return result.stream().findFirst();
     }
 
-    public Long save(VikingEntity viking) {
+    public Integer save(VikingEntity viking) {
         String sql = """
                 insert into vikings(name, age, height_cm, hair_color, beard_style)
                 values (?, ?, ?, ?, ?)
@@ -85,10 +85,10 @@ public class VikingRepository {
             throw new IllegalStateException("Не удалось получить id созданного викинга");
         }
 
-        return key.longValue();
+        return key.intValue();
     }
 
-    public void deleteById(long id) {
+    public void deleteById(int id) {
         String sql = "delete from vikings where id = ?";
         jdbcTemplate.update(sql, id);
     }
