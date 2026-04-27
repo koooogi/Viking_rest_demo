@@ -69,7 +69,6 @@ public class VikingController {
     public String deleteViking(@PathVariable int id) {
         System.out.println("DELETE /api/vikings/" + id + " called");
         vikingService.deleteViking(id);
-        vikingListener.refreshGui();
         return "Viking with ID " + id + " deleted";
     }
 }
