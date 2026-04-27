@@ -13,16 +13,15 @@ import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.List;
-
 
 public class VikingDesktopFrame extends JFrame {
 
     private final VikingService vikingService;
-    private final VikingTableModel tableModel = new VikingTableModel();
+    private final VikingTableModel tableModel;
 
     public VikingDesktopFrame(VikingService vikingService) {
         this.vikingService = vikingService;
+        this.tableModel = new VikingTableModel(vikingService); 
 
         setTitle("Viking Demo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,29 +39,26 @@ public class VikingDesktopFrame extends JFrame {
 
         JButton createButton = new JButton("Create random viking");
         createButton.addActionListener(event -> onCreateViking());
+        
+        JButton refreshButton = new JButton("Refresh");
+        refreshButton.addActionListener(event -> refreshTable());
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(createButton);
+        bottomPanel.add(refreshButton);
         add(bottomPanel, BorderLayout.SOUTH);
-        
-        onInit();
     }
 
     private void onCreateViking() {
-        Viking viking = vikingService.createRandomViking();
-        tableModel.addViking(viking);
+        vikingService.createRandomViking();  
+        tableModel.refresh();             
     }
     
-    public void addNewViking(Viking viking){
-        tableModel.addViking(viking);
+    public void addNewViking(Viking viking) {
+        refreshTable();  
     }
 
-    private void onInit() {
-        List<Viking> all = vikingService.findAll();
-        if (!all.isEmpty()){
-            for (Viking viking : all) {
-                tableModel.addViking(viking);
-            }
-        }
+    public void refreshTable() {
+        tableModel.refresh();  
     }
 }

@@ -33,7 +33,8 @@ public class VikingService {
         Viking viking = vikingFactory.createRandomViking();
         return vikingStorage.save(viking);
     }
-    public void deleteById(int id) {
+
+    public void deleteViking(int id) {
         vikingStorage.deleteById(id);
     }
 }

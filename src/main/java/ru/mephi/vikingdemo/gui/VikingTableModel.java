@@ -2,26 +2,24 @@ package ru.mephi.vikingdemo.gui;
 
 import ru.mephi.vikingdemo.model.EquipmentItem;
 import ru.mephi.vikingdemo.model.Viking;
+import ru.mephi.vikingdemo.service.VikingService;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class VikingTableModel extends AbstractTableModel {
 
-    private final String[] columns = {"Name", "Age", "Height (cm)", "Hair color", "Beard style", "Equipment"};
-    private final List<Viking> data = new ArrayList<>();
+    private final String[] columns = {"ID", "Name", "Age", "Height (cm)", "Hair color", "Beard style", "Equipment"};
+    private final VikingService vikingService;
 
-    public void addViking(Viking viking) {
-        int row = data.size();
-        data.add(viking);
-        fireTableRowsInserted(row, row);
+    public VikingTableModel(VikingService vikingService) {
+        this.vikingService = vikingService; 
     }
 
     @Override
     public int getRowCount() {
-        return data.size();
+        return vikingService.findAll().size();  
     }
 
     @Override
@@ -36,8 +34,10 @@ public class VikingTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Viking viking = data.get(rowIndex);
-        return switch (columnIndex) {
+        List<Viking> vikings = vikingService.findAll(); 
+        Viking viking = vikings.get(rowIndex);
+        
+        return switch (columnIndex) {        
             case 0 -> viking.name();
             case 1 -> viking.age();
             case 2 -> viking.heightCm();
@@ -49,8 +49,15 @@ public class VikingTableModel extends AbstractTableModel {
     }
 
     private String formatEquipment(List<EquipmentItem> equipment) {
+        if (equipment == null || equipment.isEmpty()) {
+            return "—";
+        }
         return equipment.stream()
                 .map(item -> item.name() + " [" + item.quality() + "]")
                 .collect(Collectors.joining(", "));
+    }
+
+    public void refresh() {
+        fireTableDataChanged();
     }
 }

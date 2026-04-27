@@ -11,11 +11,13 @@ import ru.mephi.vikingdemo.model.Viking;
 import ru.mephi.vikingdemo.service.VikingService;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/api/vikings")
-@Tag(name = "Vikings", description = "Операции с викингами")
+@Tag(name = "Vikings", description = "РћРїРµСЂР°С†РёРё СЃ РІРёРєРёРЅРіР°РјРё")
 public class VikingController {
 
     private final VikingService vikingService;
@@ -27,10 +29,10 @@ public class VikingController {
     }
     
     @GetMapping
-    @Operation(summary = "Получить список созданных викингов", 
+    @Operation(summary = "РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє СЃРѕР·РґР°РЅРЅС‹С… РІРёРєРёРЅРіРѕРІ", 
             operationId = "getAllVikings")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Список успешно получен")
+            @ApiResponse(responseCode = "200", description = "РЎРїРёСЃРѕРє СѓСЃРїРµС€РЅРѕ РїРѕР»СѓС‡РµРЅ")
     })
     public List<Viking> getAllVikings() {
         System.out.println("GET /api/vikings called");
@@ -38,10 +40,10 @@ public class VikingController {
     }
 
     @GetMapping("/test")
-    @Operation(summary = "Получить список тестовых викингов", 
+    @Operation(summary = "РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє С‚РµСЃС‚РѕРІС‹С… РІРёРєРёРЅРіРѕРІ", 
             operationId = "getTest")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Список успешно получен")
+            @ApiResponse(responseCode = "200", description = "РЎРїРёСЃРѕРє СѓСЃРїРµС€РЅРѕ РїРѕР»СѓС‡РµРЅ")
     })
     public List<String> test() {
         System.out.println("GET /api/vikings/test called");
@@ -49,12 +51,25 @@ public class VikingController {
     }
     
     @PostMapping("/post")
-    @Operation(summary = "Создать викинга со случайными параметрами", 
+    @Operation(summary = "РЎРѕР·РґР°С‚СЊ РІРёРєРёРЅРіР° СЃРѕ СЃР»СѓС‡Р°Р№РЅС‹РјРё РїР°СЂР°РјРµС‚СЂР°РјРё", 
             operationId = "post")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Викинг успешно создан")
+            @ApiResponse(responseCode = "200", description = "Р’РёРєРёРЅРі СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅ")
     })
     public void addViking(){
         vikingListener.testAdd();
+    }
+    
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Удалить викинга по ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Викинг успешно удалён"),
+        @ApiResponse(responseCode = "404", description = "Викинг не найден")
+    })
+    public String deleteViking(@PathVariable int id) {
+        System.out.println("DELETE /api/vikings/" + id + " called");
+        vikingService.deleteViking(id);
+        vikingListener.refreshGui();
+        return "Viking with ID " + id + " deleted";
     }
 }
