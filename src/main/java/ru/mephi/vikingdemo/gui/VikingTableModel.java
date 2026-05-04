@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class VikingTableModel extends AbstractTableModel {
 
-    private final String[] columns = {"ID", "Name", "Age", "Height (cm)", "Hair color", "Beard style", "Equipment"};
+    private final String[] columns = {"Name", "Age", "Height (cm)", "Hair color", "Beard style", "Equipment"};
     private final VikingService vikingService;
 
     public VikingTableModel(VikingService vikingService) {
