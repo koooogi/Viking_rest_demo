@@ -1,6 +1,11 @@
 package ru.mephi.vikingdemo.lambda_service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import ru.mephi.vikingdemo.model.BeardStyle;
 import ru.mephi.vikingdemo.model.HairColor;
@@ -16,6 +21,8 @@ public class VikingLambdaService {
     
     private VikingService vikingService;
     
+    
+    //first
     public VikingLambdaService(VikingService vikingService){
         this.vikingService = vikingService;
     }
@@ -58,4 +65,28 @@ public class VikingLambdaService {
         }
         return viking.equipment().stream().filter(e -> e.name() != null && e.name().toLowerCase().contains("axe")).count();
     }
+    
+    //second
+    public Optional<Viking> getRandomVikingByHeight(){
+    List<Viking> vikings = vikingService.findAll().stream().filter(v -> v.heightCm() > 180).collect(Collectors.toList());
+    
+    if (vikings.isEmpty()) {
+        return Optional.empty();
+    }
+    
+    int randomIndex = new Random().nextInt(vikings.size());
+    return Optional.of(vikings.get(randomIndex));
+    }
+    
+    public List<Viking> getVikingsWithLegendaryEquipment(){
+    return vikingService.findAll().stream().filter(v -> v.equipment() != null && v.equipment().stream()
+            .anyMatch(e -> "Legendary".equalsIgnoreCase(e.quality()))).collect(Collectors.toList());
+    }
+    
+    public List<Viking> getRedBeardedSortedByAge(){
+    return vikingService.findAll().stream().filter(v -> v.hairColor() == HairColor.Red).sorted(Comparator.comparingInt(v -> v.age()))
+            .collect(Collectors.toList());
+    }
+    
+    
 }

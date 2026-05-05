@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/api/vikings")
-@Tag(name = "Vikings", description = "РћРїРµСЂР°С†РёРё СЃ РІРёРєРёРЅРіР°РјРё")
+@Tag(name = "Vikings", description = "Операции с викингами")
 public class VikingController {
 
     private final VikingService vikingService;
@@ -29,10 +29,10 @@ public class VikingController {
     }
     
     @GetMapping
-    @Operation(summary = "РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє СЃРѕР·РґР°РЅРЅС‹С… РІРёРєРёРЅРіРѕРІ", 
+    @Operation(summary = "Получить список созданных викингов", 
             operationId = "getAllVikings")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "РЎРїРёСЃРѕРє СѓСЃРїРµС€РЅРѕ РїРѕР»СѓС‡РµРЅ")
+            @ApiResponse(responseCode = "200", description = "Список успешно получен")
     })
     public List<Viking> getAllVikings() {
         System.out.println("GET /api/vikings called");
@@ -40,10 +40,10 @@ public class VikingController {
     }
 
     @GetMapping("/test")
-    @Operation(summary = "РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє С‚РµСЃС‚РѕРІС‹С… РІРёРєРёРЅРіРѕРІ", 
+    @Operation(summary = "Получить список тестовых викингов", 
             operationId = "getTest")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "РЎРїРёСЃРѕРє СѓСЃРїРµС€РЅРѕ РїРѕР»СѓС‡РµРЅ")
+            @ApiResponse(responseCode = "200", description = "Список успешно получен")
     })
     public List<String> test() {
         System.out.println("GET /api/vikings/test called");
@@ -51,10 +51,10 @@ public class VikingController {
     }
     
     @PostMapping("/post")
-    @Operation(summary = "РЎРѕР·РґР°С‚СЊ РІРёРєРёРЅРіР° СЃРѕ СЃР»СѓС‡Р°Р№РЅС‹РјРё РїР°СЂР°РјРµС‚СЂР°РјРё", 
+    @Operation(summary = "Создать викинга со случайными параметрами", 
             operationId = "post")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Р’РёРєРёРЅРі СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅ")
+            @ApiResponse(responseCode = "200", description = "Викинг успешно создан")
     })
     public void addViking(){
         vikingListener.testAdd();
