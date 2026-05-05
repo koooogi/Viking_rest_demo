@@ -102,4 +102,30 @@ public class VikingLambdaController {
         List<Viking> vikings = lambdaService.getRedBeardedSortedByAge();
         return Map.of("total count", vikings.size(), "vikings", vikings);
     }
+    
+    //third
+    @GetMapping("/ids/all")
+    @Operation(summary = "Get all viking IDs")
+    public Map<String, Object> getAllIds(){
+        List<Integer> ids = lambdaService.getAllIds();
+        return Map.of("total count", ids.size(),"ids", ids);
+    }
+    
+    @GetMapping("/ids/max")
+    @Operation(summary = "Get maximum viking ID")
+    public Map<String, Object> getMaxId(){
+        int maxId = lambdaService.getMaxId();
+        if(maxId > 0){
+            return Map.of("max ID", maxId);
+        }else{
+            return Map.of("message", "No vikings in database");
+        }
+    }
+    
+    @GetMapping("/ids/even")
+    @Operation(summary = "Get even viking IDs")
+    public Map<String, Object> getEvenIds(){
+        List<Integer> evenIds = lambdaService.getEvenIds();
+        return Map.of("total count", evenIds.size(), "even IDs", evenIds);
+    }
 }
