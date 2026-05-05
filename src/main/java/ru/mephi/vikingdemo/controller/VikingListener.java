@@ -22,4 +22,8 @@ public class VikingListener {
     void testAdd() {
         gui.addNewViking(service.createRandomViking());
     }
+    
+    public void refreshGui() {
+        gui.refreshTable();
+    }
 }

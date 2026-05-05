@@ -1,5 +1,6 @@
 package ru.mephi.vikingdemo.lambda_service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.springframework.stereotype.Service;
 import ru.mephi.vikingdemo.model.BeardStyle;
 import ru.mephi.vikingdemo.model.HairColor;
@@ -102,5 +104,22 @@ public class VikingLambdaService {
     
     public List<Integer> getEvenIds(){
         return vikingStorage.getAllIds().stream().filter(id -> id % 2 == 0).sorted().toList();
+    }
+    
+    //mass_generation
+    public List<Viking> generateVikings(int count){
+        if(count <= 0){
+            throw new IllegalArgumentException("Количество должно быть больше 0");
+        }
+        if(count > 100) {
+            throw new IllegalArgumentException("100 is a max number of vikings");
+        }
+    
+        List<Viking> vikings = new ArrayList<>();
+        for(int i = 0; i < count; i++){
+            vikings.add(vikingService.createRandomViking());
+            }
+        
+        return vikings;
     }
 }

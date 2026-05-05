@@ -5,11 +5,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.mephi.vikingdemo.controller.VikingListener;
 import ru.mephi.vikingdemo.lambda_service.VikingLambdaService;
 import ru.mephi.vikingdemo.model.BeardStyle;
 import ru.mephi.vikingdemo.model.HairColor;
@@ -26,11 +29,12 @@ import ru.mephi.vikingdemo.model.Viking;
 public class VikingLambdaController {
     
     private final VikingLambdaService lambdaService;
-    
+    private final VikingListener vikingListener;
     
     //first
-    public VikingLambdaController(VikingLambdaService lambdaService){
+    public VikingLambdaController(VikingLambdaService lambdaService, VikingListener vikingListener){
         this.lambdaService = lambdaService;
+        this.vikingListener = vikingListener;
     }
     
     @GetMapping("/count/age-greater/{age}")
@@ -127,5 +131,14 @@ public class VikingLambdaController {
     public Map<String, Object> getEvenIds(){
         List<Integer> evenIds = lambdaService.getEvenIds();
         return Map.of("total count", evenIds.size(), "even IDs", evenIds);
+    }
+    
+    //mass_generation
+    @PostMapping("/generate/{count}")
+    @Operation(summary = "Generate vikings (max 100)")
+    public Map<String, Object> generateVikings(@PathVariable int count) {
+        List<Viking> vikings = lambdaService.generateVikings(count);
+        vikingListener.refreshGui();
+        return Map.of("generated", vikings.size(), "names", vikings.stream().map(Viking::name).collect(Collectors.toList()));
     }
 }
