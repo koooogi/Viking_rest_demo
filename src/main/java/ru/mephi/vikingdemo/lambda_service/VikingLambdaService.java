@@ -2,6 +2,7 @@ package ru.mephi.vikingdemo.lambda_service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import ru.mephi.vikingdemo.model.BeardStyle;
 import ru.mephi.vikingdemo.model.HairColor;
 import ru.mephi.vikingdemo.model.Viking;
+import ru.mephi.vikingdemo.repository.VikingStorage;
 import ru.mephi.vikingdemo.service.VikingService;
 
 /**
@@ -19,12 +21,13 @@ import ru.mephi.vikingdemo.service.VikingService;
 @Service
 public class VikingLambdaService {
     
-    private VikingService vikingService;
-    
+    private final VikingService vikingService;
+    private final VikingStorage vikingStorage;
     
     //first
-    public VikingLambdaService(VikingService vikingService){
+    public VikingLambdaService(VikingService vikingService, VikingStorage vikingStorage){
         this.vikingService = vikingService;
+        this.vikingStorage = vikingStorage;
     }
     
     private long count(Predicate<Viking> predicate){
@@ -88,5 +91,16 @@ public class VikingLambdaService {
             .collect(Collectors.toList());
     }
     
+    //third
+    public List<Integer> getAllIds(){
+        return vikingStorage.getAllIds();
+    }
     
+    public int getMaxId(){
+        return vikingStorage.getAllIds().stream().mapToInt(id -> id).max().orElse(0);
+    }
+    
+    public List<Integer> getEvenIds(){
+        return vikingStorage.getAllIds().stream().filter(id -> id % 2 == 0).sorted().toList();
+    }
 }

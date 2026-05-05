@@ -58,6 +58,10 @@ public class VikingStorage {
                 .toList();
     }
 
+    public List<Integer> getAllIds(){
+    return vikingRepository.findAll().stream().map(VikingEntity::id).toList();
+    }
+    
     @Transactional
     public void deleteById(int id) {
         vikingRepository.deleteById(id);
