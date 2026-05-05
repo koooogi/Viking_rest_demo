@@ -2,7 +2,9 @@ package ru.mephi.vikingdemo.lambda_controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.mephi.vikingdemo.lambda_service.VikingLambdaService;
 import ru.mephi.vikingdemo.model.BeardStyle;
 import ru.mephi.vikingdemo.model.HairColor;
+import ru.mephi.vikingdemo.model.Viking;
 
 /**
  *
@@ -24,6 +27,8 @@ public class VikingLambdaController {
     
     private final VikingLambdaService lambdaService;
     
+    
+    //first
     public VikingLambdaController(VikingLambdaService lambdaService){
         this.lambdaService = lambdaService;
     }
@@ -69,5 +74,32 @@ public class VikingLambdaController {
     @Operation(summary = "Count vikings with two axes")
     public Map<String, Object> countByTwoAxes(){
         return Map.of("required", "two axes", "total count", lambdaService.countTwoAxes());
+    }
+    
+    //second
+    @GetMapping("/random-by-height")
+    @Operation(summary = "Get random viking taller than 180 cm")
+    public Map<String, Object> getRandomTallViking(){
+    Optional<Viking> viking = lambdaService.getRandomVikingByHeight();
+    
+    if(viking.isPresent()){
+        return Map.of("found", true, "viking", viking.get());
+    }else{
+        return Map.of("found", false, "message", "No vikings taller than 180 cm");
+        }
+    }
+    
+    @GetMapping("/legendary-equipment")
+    @Operation(summary = "Get vikings with legendary equipment")
+    public Map<String, Object> getVikingsWithLegendaryEquipment(){
+        List<Viking> vikings = lambdaService.getVikingsWithLegendaryEquipment();
+        return Map.of("total count", vikings.size(), "vikings", vikings);
+    }
+    
+    @GetMapping("/red-bearded-sorted")
+    @Operation(summary = "Get red-bearded vikings sorted by age")
+    public Map<String, Object> getRedBeardedSortedByAge(){
+        List<Viking> vikings = lambdaService.getRedBeardedSortedByAge();
+        return Map.of("total count", vikings.size(), "vikings", vikings);
     }
 }
