@@ -13,15 +13,18 @@ import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import ru.mephi.vikingdemo.lambda_service.VikingLambdaService;
 
 public class VikingDesktopFrame extends JFrame {
 
     private final VikingService vikingService;
     private final VikingTableModel tableModel;
+    private final VikingLambdaService lambdaService;
 
-    public VikingDesktopFrame(VikingService vikingService) {
+    public VikingDesktopFrame(VikingService vikingService, VikingLambdaService lambdaService) {
         this.vikingService = vikingService;
         this.tableModel = new VikingTableModel(vikingService); 
+        this.lambdaService = lambdaService;
 
         setTitle("Viking Demo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,10 +45,17 @@ public class VikingDesktopFrame extends JFrame {
         
         JButton refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(event -> refreshTable());
+        
+        JButton lambdaButton = new JButton("Viking Filters");
+        lambdaButton.addActionListener(event -> {
+        LambdaFrame lambdaFrame = new LambdaFrame(lambdaService);
+        lambdaFrame.setVisible(true);
+        });
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(createButton);
         bottomPanel.add(refreshButton);
+        bottomPanel.add(lambdaButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
