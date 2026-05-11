@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.springframework.stereotype.Service;
 import ru.mephi.vikingdemo.model.BeardStyle;
 import ru.mephi.vikingdemo.model.HairColor;
@@ -71,23 +72,23 @@ public class VikingLambdaService {
     
     //second
     public Optional<Viking> getRandomVikingByHeight(){
-    List<Viking> vikings = vikingService.findAll().stream().filter(v -> v.heightCm() > 180).collect(Collectors.toList());
+        List<Viking> vikings = vikingService.findAll().stream().filter(v -> v.heightCm() > 180).collect(Collectors.toList());
     
-    if (vikings.isEmpty()) {
-        return Optional.empty();
+        if (vikings.isEmpty()) {
+            return Optional.empty();
     }
     
-    int randomIndex = new Random().nextInt(vikings.size());
-    return Optional.of(vikings.get(randomIndex));
+        int randomIndex = new Random().nextInt(vikings.size());
+        return Optional.of(vikings.get(randomIndex));
     }
     
     public List<Viking> getVikingsWithLegendaryEquipment(){
-    return vikingService.findAll().stream().filter(v -> v.equipment() != null && v.equipment().stream()
+        return vikingService.findAll().stream().filter(v -> v.equipment() != null && v.equipment().stream()
             .anyMatch(e -> "Legendary".equalsIgnoreCase(e.quality()))).collect(Collectors.toList());
     }
     
     public List<Viking> getRedBeardedSortedByAge(){
-    return vikingService.findAll().stream().filter(v -> v.hairColor() == HairColor.Red).sorted(Comparator.comparingInt(v -> v.age()))
+        return vikingService.findAll().stream().filter(v -> v.hairColor() == HairColor.Red).sorted(Comparator.comparingInt(v -> v.age()))
             .collect(Collectors.toList());
     }
     
@@ -113,10 +114,6 @@ public class VikingLambdaService {
             throw new IllegalArgumentException("100 is a max number of vikings");
         }
     
-        List<Viking> vikings = new ArrayList<>();
-        for(int i = 0; i < count; i++){
-            vikings.add(vikingService.createRandomViking());
-            }
-        return vikings;
+        return IntStream.range(0, count).mapToObj(i -> vikingService.createRandomViking()).collect(Collectors.toList());
     }
 }
