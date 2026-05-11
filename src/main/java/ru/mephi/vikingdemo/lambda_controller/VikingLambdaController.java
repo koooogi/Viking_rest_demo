@@ -68,16 +68,12 @@ public class VikingLambdaController {
         );
     }
     
-    @GetMapping("/count/one-axe")
-    @Operation(summary = "Count vikings with one axe")
-    public Map<String, Object> countByOneAxe(){
-        return Map.of("required", "one axe", "total count", lambdaService.countOneAxe());
-    }
-
-    @GetMapping("/count/two-axes")
-    @Operation(summary = "Count vikings with two axes")
-    public Map<String, Object> countByTwoAxes(){
-        return Map.of("required", "two axes", "total count", lambdaService.countTwoAxes());
+    @GetMapping("/count/axes")
+    @Operation(summary = "Count vikings with 1 or 2 axes")
+    public Map<String, Object> countByAxes() {
+        return Map.of(
+            "required", "1 or 2 axes",
+            "total count", lambdaService.countByAxes());
     }
     
     //second

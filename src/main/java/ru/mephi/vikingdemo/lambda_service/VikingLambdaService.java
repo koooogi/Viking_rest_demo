@@ -54,13 +54,12 @@ public class VikingLambdaService {
     public long countBeardAndHairColor(BeardStyle beard, HairColor hair){
         return count(l -> l.beardStyle() == beard && l.hairColor() == hair);
     }
-    
-    public long countOneAxe(){
-        return count(l -> countAxes(l) == 1);
-    }
-    
-    public long countTwoAxes(){
-        return count(l -> countAxes(l) == 2);
+        
+    public long countByAxes(){
+        return count(l -> {
+            long axes = countAxes(l);
+            return axes == 1 || axes == 2;
+        });
     }
     
     private long countAxes(Viking viking){
